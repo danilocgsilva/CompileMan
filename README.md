@@ -1,2 +1,4 @@
 # CompileMan
-Compiles and clean compilations on project
+
+Give some human readable data here.
+
