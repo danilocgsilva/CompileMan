@@ -17,4 +17,11 @@ def cman():
         print('You have not provided any command and it was not possible to guess. Tell if you want to compile or clean the compiled assets typing \'compile\' or \'clean\'.')
         exit()
 
-    compileman.cancompile()
+    project_types = compileman.get_project_types()
+
+    can_compile = compileman.cancompile(project_types)
+    if not can_compile:
+        for reasons in compileman.get_cannot_compile_reasons():
+            print(reasons)
+    else:
+        compileman.compile_all()

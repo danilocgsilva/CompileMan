@@ -9,65 +9,77 @@ from compileman.CompileMan import CompileMan
 class test_CompileMan(unittest.TestCase):
 
     def setUp(self):
-        self.compileman = CompileMan()
+        self.go_to_tmp()
 
     def test_is_node_module_exists(self):
-        self.go_to_tmp()
         self.empty_folder()
         os.makedirs('node_modules')
-        self.assertTrue(self.compileman.is_node_module_exists())
+        compileman = CompileMan()
+        self.assertTrue(compileman.is_node_module_exists())
 
     def test_is_node_module_exists_false(self):
-        self.go_to_tmp()
         self.empty_folder()
-        self.assertFalse(self.compileman.is_node_module_exists())
+        compileman = CompileMan()
+        self.assertFalse(compileman.is_node_module_exists())
 
     def test_is_vendor_exists(self):
-        self.go_to_tmp()
+        self.empty_folder()
         os.makedirs('vendor')
-        self.assertTrue(self.compileman.is_vendor_exists())
+        compileman = CompileMan()
+        self.assertTrue(compileman.is_vendor_exists())
 
     def test_is_vendor_exists_false(self):
-        self.go_to_tmp()
         self.empty_folder()
-        self.assertFalse(self.compileman.is_vendor_exists())
+        compileman = CompileMan()
+        self.assertFalse(compileman.is_vendor_exists())
 
     def test_guess_action_clean(self):
         self.empty_folder()
         os.makedirs('node_modules')
         os.makedirs('vendor')
+        compileman = CompileMan()
         expected_result = 'clean'
-        self.assertEqual(expected_result, self.compileman.guess_action())
+        self.assertEqual(expected_result, compileman.guess_action())
 
     def test_guess_action_compile(self):
         self.empty_folder()
         expected_result = 'compile'
-        self.assertEqual(expected_result, self.compileman.guess_action())
+        compileman = CompileMan()
+        self.assertEqual(expected_result, compileman.guess_action())
 
     def test_guess_action_doubt_node_modules(self):
         self.empty_folder()
         os.makedirs('node_modules')
+        compileman = CompileMan()
         expected_result = ''
-        self.assertEqual(expected_result, self.compileman.guess_action())
+        self.assertEqual(expected_result, compileman.guess_action())
 
     def test_guess_action_doubt_vendor(self):
         self.empty_folder()
         os.makedirs('vendor')
+        compileman = CompileMan()
         expected_result = ''
-        self.assertEqual(expected_result, self.compileman.guess_action())
+        self.assertEqual(expected_result, compileman.guess_action())
 
     def test_execute_wrong_command(self):
         with self.assertRaises(Exception):
             self.compileman.execute('non_existent')
 
-    def test_cancompile(self):
-        # Here the command will checks composer command line against composer.json and npm command line against package.json.
-        # If the project is php, must have composer installed and can procceed
-        # If the project is node, must have npm installed and can procceed
-        # If both, must have both command line and procceed
-        # Otherwise return false
-        # I suggests to check the output of which command in posix and it's equivalents in Windows, so the output result can be mocked to test
-        self.assertTrue(False)
+    def test_cancompile_empty_compilations(self):
+        compileman = CompileMan()
+        can_compile = compileman.cancompile([])
+        self.assertFalse(can_compile)
+
+    def test_cancompile_wrong_data(self):
+        compileman = CompileMan()
+        with self.assertRaises(Exception):
+            compileman.cancompile(['not_valid'])
+
+    def test_check_project_types(self):
+        compileman = CompileMan()
+        project_types = compileman.get_project_types()
+        expected_project_types = []
+        self.assertListEqual(expected_project_types, project_types)
 
     def go_to_tmp(self):
         tmp_place = tempfile.gettempdir()
