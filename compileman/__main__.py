@@ -11,7 +11,7 @@ def cman():
     if not commands.is_command_given():
         command = compileman.guess_action()
     else:
-        command = command.get_command_given()
+        command = commands.get_command_given()
 
     if command == '':
         print('You have not provided any command and it was not possible to guess. Tell if you want to compile or clean the compiled assets typing \'compile\' or \'clean\'.')
@@ -19,9 +19,15 @@ def cman():
 
     project_types = compileman.get_project_types()
 
-    can_compile = compileman.cancompile(project_types)
-    if not can_compile:
-        for reasons in compileman.get_cannot_compile_reasons():
-            print(reasons)
-    else:
-        compileman.compile_all()
+    if command == 'compile':
+        can_compile = compileman.cancompile(project_types)
+        print("Can compile: " + str(can_compile))
+        if not can_compile:
+            for reasons in compileman.get_cannot_compile_reasons():
+                print(reasons)
+        else:
+            compileman.compile_all()
+
+    if command == 'clean':
+        compileman.clean(project_types)
+

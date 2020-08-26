@@ -81,6 +81,11 @@ class test_CompileMan(unittest.TestCase):
         expected_project_types = []
         self.assertListEqual(expected_project_types, project_types)
 
+    def test_clean_wrong_type(self):
+        compileman = CompileMan()
+        with self.assertRaises(Exception):
+            compileman.clean(['non_existent'])
+
     def go_to_tmp(self):
         tmp_place = tempfile.gettempdir()
         os.chdir(tmp_place)

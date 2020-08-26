@@ -5,6 +5,10 @@ import subprocess
 class CompileMan:
 
     def __init__(self):
+
+        # print(self.check_for_app_placement('npm'))
+        # print(self.check_for_app_placement('composer'))
+
         self.current_folder_list_content = os.listdir()
         self.npm_exists = False if self.check_for_app_placement('npm') == "" else True
         self.composer_exists = False if self.check_for_app_placement('composer') == "" else True
@@ -43,19 +47,21 @@ class CompileMan:
             if not compilation_type in ['node','php']:
                 raise Exception("Compilation type provided not exists.")
 
-            if compilation_type == 'node' and self.npm_exists:
-                can_compile = True
-            else:
-                self.cannot_compile_reasons.append('The project is of node type, but npm is not installed in the system.')
+            if compilation_type == 'node':
+                if self.npm_exists:
+                    can_compile = True
+                else:
+                    self.cannot_compile_reasons.append('The project is of node type, but npm is not installed in the system.')
 
-            if compilation_type == 'php' and self.composer_exists:
-                can_compile = True
-            else:
-                self.cannot_compile_reasons.append('The project is of php type, but composer is not installed in the system.')
+            if compilation_type == 'php':
+                if self.composer_exists:
+                    can_compile = True
+                else:
+                    self.cannot_compile_reasons.append('The project is of php type, but composer is not installed in the system.')
 
         self.compiling_types = compilations
 
-        return can_compile if len(self.cannot_compile_reasons) == "" else False
+        return can_compile if len(self.cannot_compile_reasons) == 0 else False
 
     def check_for_app_placement(self, app: str) -> str:
         process = subprocess.Popen(['which', app], stdout=subprocess.PIPE)
@@ -66,8 +72,16 @@ class CompileMan:
         return self.cannot_compile_reasons
 
     def compile_all(self):
+        print('lets compile')
         for compilling_type in self.compiling_types:
             if compilling_type == "php":
                 subprocess.call(['composer', 'install'])
             if compilling_type == "node":
                 subprocess.call(['npm', 'install'])
+
+    def clean(self, compiling_types: list):
+
+        for compile_type in compiling_types:
+            if not compile_type in ['php','node']:
+                raise Exception('The parameters provided in clean method is not valid.')
+        
