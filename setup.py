@@ -17,7 +17,7 @@ setup(
     author="Danilo Silva",
     author_email="contact@danilocgsilva.me",
     packages=["compileman"],
-    entry_points={"console_scripts": ["cman=compileman.__main__:main"],},
+    entry_points={"console_scripts": ["cman=compileman.__main__:cman"],},
     include_package_data=True
 )
 
