@@ -1,6 +1,7 @@
 import os
 import subprocess
 import shutil
+from sys import platform
 
 
 class CompileMan:
@@ -62,9 +63,13 @@ class CompileMan:
         return can_compile if len(self.cannot_compile_reasons) == 0 else False
 
     def check_for_app_placement(self, app: str) -> str:
-        process = subprocess.Popen(['which', app], stdout=subprocess.PIPE)
-        out, err = process.communicate()
-        return str(out)
+        if self.is_posix(platform):
+            process = subprocess.Popen(['which', app], stdout=subprocess.PIPE)
+            out, err = process.communicate()
+            return str(out)
+        else:
+            raise Exception('Still not implemented in systems that are not Posix (Mac Os or Linux)')
+
 
     def get_cannot_compile_reasons(self) -> list:
         return self.cannot_compile_reasons
@@ -85,3 +90,11 @@ class CompileMan:
 
         if project_type == 'php':
             shutil.rmtree('vendor')
+
+    def is_posix(self, platform: str):
+        if platform == "linux" or platform == "linux2":
+            return True
+        elif platform == "darwin":
+            return True
+        elif platform == "win32":
+            return False
