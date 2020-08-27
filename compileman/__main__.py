@@ -21,13 +21,16 @@ def cman():
 
     if command == 'compile':
         can_compile = compileman.cancompile(project_types)
-        print("Can compile: " + str(can_compile))
         if not can_compile:
             for reasons in compileman.get_cannot_compile_reasons():
                 print(reasons)
         else:
-            compileman.compile_all()
+            for project_type in project_types:
+                print("Compiling to project type of " + project_type)
+                compileman.compile(project_type)
 
     if command == 'clean':
-        compileman.clean(project_types)
+        for compilling_type in project_types:
+            print("Removing project of type " + compilling_type)
+            compileman.clean_project_type(compilling_type)
 

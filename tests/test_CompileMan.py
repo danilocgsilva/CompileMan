@@ -86,6 +86,24 @@ class test_CompileMan(unittest.TestCase):
         with self.assertRaises(Exception):
             compileman.clean(['non_existent'])
 
+    def test_clean_project_type_node(self):
+        os.makedirs('node_modules')
+        os.makedirs('vendor')
+        compileman = CompileMan()
+        compileman.clean_project_type('node')
+        files_in_directory = os.listdir()
+        cleaned = not 'node_modules' in files_in_directory
+        self.assertTrue(cleaned)
+
+    def test_clean_project_type_node(self):
+        os.makedirs('node_modules')
+        os.makedirs('vendor')
+        compileman = CompileMan()
+        compileman.clean_project_type('php')
+        files_in_directory = os.listdir()
+        cleaned = not 'vendor' in files_in_directory
+        self.assertTrue(cleaned)
+
     def go_to_tmp(self):
         tmp_place = tempfile.gettempdir()
         os.chdir(tmp_place)

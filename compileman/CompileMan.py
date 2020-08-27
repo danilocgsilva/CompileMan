@@ -1,13 +1,11 @@
 import os
 import subprocess
+import shutil
 
 
 class CompileMan:
 
     def __init__(self):
-
-        # print(self.check_for_app_placement('npm'))
-        # print(self.check_for_app_placement('composer'))
 
         self.current_folder_list_content = os.listdir()
         self.npm_exists = False if self.check_for_app_placement('npm') == "" else True
@@ -71,17 +69,19 @@ class CompileMan:
     def get_cannot_compile_reasons(self) -> list:
         return self.cannot_compile_reasons
 
-    def compile_all(self):
-        print('lets compile')
-        for compilling_type in self.compiling_types:
-            if compilling_type == "php":
-                subprocess.call(['composer', 'install'])
-            if compilling_type == "node":
-                subprocess.call(['npm', 'install'])
+    def compile(self, project_type: str):
+        if project_type == 'node':
+            subprocess.call(['npm', 'install'])
+        if project_type == 'php':
+            subprocess.call(['composer', 'install'])
 
-    def clean(self, compiling_types: list):
+    def clean_project_type(self, project_type: str):
 
-        for compile_type in compiling_types:
-            if not compile_type in ['php','node']:
-                raise Exception('The parameters provided in clean method is not valid.')
+        if not project_type in ['php','node']:
+            raise Exception('The parameters provided in clean method is not valid.')
         
+        if project_type == 'node':
+            shutil.rmtree('node_modules')
+
+        if project_type == 'php':
+            shutil.rmtree('vendor')
