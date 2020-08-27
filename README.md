@@ -17,3 +17,8 @@ Go to the command line
 ```
 cman compile|clean
 ```
+
+This projects actually works only to the following projects:
+
+* php
+* node (only for frontend assets compilation in web application)
