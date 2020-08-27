@@ -68,17 +68,20 @@ class CompileMan:
             out, err = process.communicate()
             return str(out)
         else:
-            raise Exception('Still not implemented in systems that are not Posix (Mac Os or Linux)')
-
+            status_exec = subprocess.call('where ' + app + ' > NUL', shell=True)
+            if status_exec == 0:
+                return app
+            else:
+                return ""
 
     def get_cannot_compile_reasons(self) -> list:
         return self.cannot_compile_reasons
 
     def compile(self, project_type: str):
         if project_type == 'node':
-            subprocess.call(['npm', 'install'])
+            self.universal_subprocess_call(['npm', 'install'], platform)
         if project_type == 'php':
-            subprocess.call(['composer', 'install'])
+            self.universal_subprocess_call(['composer', 'install'], platform)
 
     def clean_project_type(self, project_type: str):
 
@@ -92,9 +95,21 @@ class CompileMan:
             shutil.rmtree('vendor')
 
     def is_posix(self, platform: str):
+        self.exception_wrong_platform(platform)
         if platform == "linux" or platform == "linux2":
             return True
         elif platform == "darwin":
             return True
         elif platform == "win32":
             return False
+
+    def universal_subprocess_call(self, subprocess_arguments: list, platform):
+        self.exception_wrong_platform(platform)
+        if platform == "linux" or platform == "linux2" or platform == "darwin":
+            subprocess.call(subprocess_arguments)
+        elif platform == "win32":
+            subprocess.call(subprocess_arguments, shell=True)
+
+    def exception_wrong_platform(self, platform):
+        if platform not in ['linux', 'linux2', 'win32', 'darwin']:
+            raise Exception('The platform name give is invalid.')

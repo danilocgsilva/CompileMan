@@ -104,6 +104,42 @@ class test_CompileMan(unittest.TestCase):
         cleaned = not 'vendor' in files_in_directory
         self.assertTrue(cleaned)
 
+    def test_is_posix_false(self):
+        compileman = CompileMan()
+        is_posix_result = compileman.is_posix('win32') 
+        self.assertFalse(is_posix_result)
+
+    def test_is_posix_true(self):
+        compileman = CompileMan()
+        is_posix_result = compileman.is_posix('linux') 
+        self.assertTrue(is_posix_result)
+
+    def test_is_posix_true_2(self):
+        compileman = CompileMan()
+        is_posix_result = compileman.is_posix('linux2') 
+        self.assertTrue(is_posix_result)
+
+    def test_is_posix_true_3(self):
+        compileman = CompileMan()
+        is_posix_result = compileman.is_posix('darwin') 
+        self.assertTrue(is_posix_result)
+
+    def test_is_posix_exception_invalid_name(self):
+        compileman = CompileMan()
+        with self.assertRaises(Exception):
+            compileman.is_posix('not_valid')
+
+    def test_universal_subprocess_call_exception(self):
+        compileman = CompileMan()
+        with self.assertRaises(Exception):
+            compile.universal_subprocess_call(['dir'], 'unknown_platform')
+
+    def test_exception_wrong_platform_invalid(self):
+        compileman = CompileMan()
+        platform = 'unknown_platform'
+        with self.assertRaises(Exception):
+            compileman.exception_wrong_platform(platform)
+
     def go_to_tmp(self):
         tmp_place = tempfile.gettempdir()
         os.chdir(tmp_place)
