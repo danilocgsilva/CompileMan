@@ -96,7 +96,18 @@ class test_CompileMan(unittest.TestCase):
         cleaned = not 'node_modules' in files_in_directory
         self.assertTrue(cleaned)
 
-    def test_clean_project_type_node(self):
+    def test_clean_project_type_node_vendor_kept(self):
+        self.empty_folder()
+        os.makedirs('node_modules')
+        os.makedirs('vendor')
+        compileman = CompileMan()
+        compileman.clean_project_type('node')
+        files_in_directory = os.listdir()
+        kept = 'vendor' in files_in_directory
+        self.assertTrue(kept)
+
+    def test_clean_project_type_php(self):
+        self.empty_folder()
         os.makedirs('node_modules')
         os.makedirs('vendor')
         compileman = CompileMan()
@@ -104,6 +115,16 @@ class test_CompileMan(unittest.TestCase):
         files_in_directory = os.listdir()
         cleaned = not 'vendor' in files_in_directory
         self.assertTrue(cleaned)
+
+    def test_clean_project_type_php_node_kept(self):
+        self.empty_folder()
+        os.makedirs('node_modules')
+        os.makedirs('vendor')
+        compileman = CompileMan()
+        compileman.clean_project_type('php')
+        files_in_directory = os.listdir()
+        kept = 'node_modules' in files_in_directory
+        self.assertTrue(kept)
 
     def test_clean_project_type_return(self):
         compileman = CompileMan()

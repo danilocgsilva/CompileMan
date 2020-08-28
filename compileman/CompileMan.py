@@ -90,20 +90,17 @@ class CompileMan:
             raise Exception('The parameters provided in clean method is not valid.')
 
         compile_result = Compile_Result()
-        
-        if project_type == 'node':
-            if os.path.exists('node_modules'):
-                shutil.rmtree('node_modules')
-                return compile_result.setSuccess()
-            else:
-                return compile_result.setError("The folder node_modules already does not exists. The directory is already cleaned.")
 
-        if project_type == 'php':
-            if os.path.exists('vendor'):
-                shutil.rmtree('vendor')
-                return compile_result.setSuccess()
-            else:
-                return compile_result.setError("The folder vendor already does not exists. The directory is already cleaned.")
+        correlation = {
+            "node": "node_modules",
+            "php": "vendor"
+        }
+        
+        if os.path.exists(correlation[project_type]):
+            shutil.rmtree(correlation[project_type])
+            return compile_result.setSuccess()
+        else:
+            return compile_result.setError("The folder " + correlation[project_type] + " already does not exists. The directory is already cleaned.")
 
     def is_posix(self, platform: str):
         self.exception_wrong_platform(platform)

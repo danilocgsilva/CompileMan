@@ -32,5 +32,13 @@ def cman():
     if command == 'clean':
         for compilling_type in project_types:
             print("Removing project of type " + compilling_type)
-            compileman.clean_project_type(compilling_type)
+            results = compileman.clean_project_type(compilling_type)
+
+            if results.getResult():
+                resultMessage = "The project " + compilling_type + " has been removed."
+            else:
+                resultMessage = results.getErrorMessage()
+
+            print(resultMessage)
+
 
