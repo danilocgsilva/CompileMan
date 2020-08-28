@@ -2,6 +2,7 @@ import os
 import subprocess
 import shutil
 from sys import platform
+from compileman.Compile_Result import Compile_Result
 
 
 class CompileMan:
@@ -87,12 +88,22 @@ class CompileMan:
 
         if not project_type in ['php','node']:
             raise Exception('The parameters provided in clean method is not valid.')
+
+        compile_result = Compile_Result()
         
         if project_type == 'node':
-            shutil.rmtree('node_modules')
+            if os.path.exists('node_modules'):
+                shutil.rmtree('node_modules')
+                return compile_result.setSuccess()
+            else:
+                return compile_result.setError("The folder node_modules already does not exists. The directory is already cleaned.")
 
         if project_type == 'php':
-            shutil.rmtree('vendor')
+            if os.path.exists('vendor'):
+                shutil.rmtree('vendor')
+                return compile_result.setSuccess()
+            else:
+                return compile_result.setError("The folder vendor already does not exists. The directory is already cleaned.")
 
     def is_posix(self, platform: str):
         self.exception_wrong_platform(platform)

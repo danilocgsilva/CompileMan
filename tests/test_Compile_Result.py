@@ -29,3 +29,14 @@ class test_Compile_Result(unittest.TestCase):
         self.compile_result.setError(error_message)
         message_returned = self.compile_result.getErrorMessage()
         self.assertEqual(error_message, message_returned)
+
+    def test_setErrorFluentInterface(self):
+        error_message = "Folder not exists when trying to remove."
+        returned_object = self.compile_result.setError(error_message)
+        self.assertTrue(returned_object, Compile_Result)
+
+    def test_setSuccessFluentInterface(self):
+        self.compile_result.setSuccess()
+        returned_object = self.compile_result.setSuccess()
+        self.assertTrue(returned_object, Compile_Result)
+        

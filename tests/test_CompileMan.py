@@ -5,6 +5,7 @@ import tempfile
 import shutil
 sys.path.insert(1, "..")
 from compileman.CompileMan import CompileMan
+from compileman.Compile_Result import Compile_Result
 
 class test_CompileMan(unittest.TestCase):
 
@@ -103,6 +104,11 @@ class test_CompileMan(unittest.TestCase):
         files_in_directory = os.listdir()
         cleaned = not 'vendor' in files_in_directory
         self.assertTrue(cleaned)
+
+    def test_clean_project_type_return(self):
+        compileman = CompileMan()
+        clean_compile_result = compileman.clean_project_type('php')
+        self.assertTrue(isinstance(clean_compile_result, Compile_Result))
 
     def test_is_posix_false(self):
         compileman = CompileMan()
